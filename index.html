@@ -6,48 +6,45 @@
 <title>JC WASH CAR - Paranaguá</title>
 <style>
 body{font-family:Arial;background:#0a0a0a;color:#fff;padding:15px;margin:0}
-h1{color:#00c6ff;text-align:center;font-size:26px;margin-bottom:5px}
-.sub{text-align:center;color:#ccc;font-size:14px;margin-bottom:15px;line-height:1.5}
+h1{color:#00c6ff;text-align:center;font-size:26px}
+.sub{text-align:center;color:#ccc;font-size:14px;margin-bottom:15px}
 .box{background:#1a1a1a;padding:16px;border-radius:14px}
 label{display:block;margin-top:12px;font-size:14px;font-weight:bold}
 input,select{width:100%;padding:13px;margin-top:5px;border-radius:9px;border:0;background:#2b2b2b;color:#fff;font-size:16px;box-sizing:border-box}
-button{width:100%;padding:15px;background:#00c6ff;color:#000;font-weight:bold;border:0;border-radius:10px;margin-top:16px;font-size:17px;cursor:pointer}
+button{width:100%;padding:15px;background:#00c6ff;color:#000;font-weight:bold;border:0;border-radius:10px;margin-top:16px;font-size:17px}
 .card{background:#222;padding:12px;border-radius:10px;margin-top:10px;border-left:4px solid #00c6ff}
-.topo{text-align:center;background:#00c6ff;color:#000;padding:10px;border-radius:10px;font-weight:bold}
+.teste{background:#ffcc00;color:#000;text-align:center;padding:10px;border-radius:10px;font-weight:bold}
+.bloqueado{background:red;color:#fff;text-align:center;padding:20px;border-radius:10px;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="topo">ABERTO HOJE - PARANAGUÁ</div>
+<div class="teste">⏰ VERSÃO TESTE - 7 DIAS GRÁTIS - Até 12/11/2026</div>
 <h1>🚗💦 JC WASH CAR</h1>
-<div class="sub">Lava Rápido em Paranaguá<br>📞 41 99247-4241<br>Agende em 30 segundos</div>
+<div class="sub">Lava Rápido em Paranaguá<br>📞 41 99247-4241</div>
+<div id="conteudo">
 <div class="box">
-<label>Seu Nome:</label>
-<input id="nome" placeholder="Ex: João">
-<label>Seu WhatsApp:</label>
-<input id="fone" placeholder="Ex: 41999...">
-<label>Carro / Placa:</label>
-<input id="carro" placeholder="Ex: Gol - ABC1234">
+<label>Seu Nome:</label><input id="nome" placeholder="Ex: João">
+<label>Seu WhatsApp:</label><input id="fone" placeholder="Ex: 41999...">
+<label>Carro / Placa:</label><input id="carro" placeholder="Ex: Gol - ABC1234">
 <label>Serviço:</label>
-<select id="servico">
-<option>Lavagem Simples - R$40</option>
-<option>Lavagem Completa - R$60</option>
-<option>Completa + Cera - R$80</option>
-<option>Interna + Bancos - R$120</option>
-<option>Caminhonete / SUV - R$80</option>
-</select>
-<label>Dia:</label>
-<input type="date" id="dia">
-<label>Hora:</label>
-<select id="hora"><option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option></select>
-<button onclick="agendar()">AGENDAR AGORA NO WHATSAPP</button>
+<select id="servico"><option>Lavagem Simples - R$40</option><option>Lavagem Completa - R$60</option><option>Completa + Cera - R$80</option><option>Interna + Bancos - R$120</option><option>Caminhonete / SUV - R$80</option></select>
+<label>Dia:</label><input type="date" id="dia">
+<label>Hora:</label><select id="hora"><option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option></select>
+<button onclick="agendar()">AGENDAR AGORA</button>
 </div>
-<h3>📋 Últimos agendamentos neste celular:</h3>
-<div id="lista"></div>
+<h3>📋 Agendamentos:</h3><div id="lista"></div>
+</div>
+<div id="aviso"></div>
 <script>
-// ==== CONFIG DO DONO - TROCA AQUI QUANDO VENDER ====
-let NUMERO_DONO = "5541992474241"; // 41 99247-4241 do JC
+let NUMERO_DONO = "5541992474241";
 let NOME_LOJA = "JC WASH CAR";
-// ====================================================
+// DATA QUE TRAVA - 7 DIAS DE HOJE 05/11
+let DATA_LIMITE = new Date('2026-11-12T23:59:59');
+let HOJE = new Date();
+if(HOJE > DATA_LIMITE){
+document.getElementById('conteudo').innerHTML = `<div class="bloqueado">⛔ PERÍODO DE TESTE ACABOU<br><br>Se gostou, chama a Rita pra liberar definitivo!<br><br><button onclick="window.open('https://wa.me/5541992474241?text=Quero%20liberar%20meu%20app%20JC%20WASH%20CAR','_blank')" style="background:#fff">CHAMAR NO WHATSAPP</button></div>`;
+document.getElementById('aviso').innerHTML = "";
+}
 function agendar(){
 let n=document.getElementById('nome').value;
 let f=document.getElementById('fone').value;
@@ -56,9 +53,8 @@ let s=document.getElementById('servico').value;
 let d=document.getElementById('dia').value;
 let h=document.getElementById('hora').value;
 if(!n||!d){alert('Coloca nome e dia');return;}
-let ag={n,f,c,s,d,h};
 let arr=JSON.parse(localStorage.getItem('jc')||'[]');
-arr.push(ag);localStorage.setItem('jc',JSON.stringify(arr));mostrar();
+arr.push({n,f,c,s,d,h});localStorage.setItem('jc',JSON.stringify(arr));mostrar();
 let msg=`Opa ${NOME_LOJA}! Quero agendar:%0A Nome: ${n}%0A Carro: ${c}%0A Serviço: ${s}%0A Dia: ${d} às ${h}%0A Meu zap: ${f}`;
 window.open(`https://wa.me/${NUMERO_DONO}?text=${msg}`,'_blank');
 }
